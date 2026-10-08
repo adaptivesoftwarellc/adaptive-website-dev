@@ -1,0 +1,1138 @@
+/* ============================================================
+   Adaptive Software — landing page
+
+   Two rules that hold the design together:
+
+   1. Colour carries meaning. Drained warm grey = the scattered
+      "before". Brand teal/green = the consolidated "after".
+   2. Monospace is not decoration. It appears ONLY inside the
+      diagram, where it marks machine/system labels. Everything
+      else — eyebrows, tags, numbers — is Archivo at width 100.
+      If mono starts showing up in prose furniture again, the
+      page goes back to looking generated.
+   ============================================================ */
+
+:root {
+  /* Ground is warm bond stock, not clinical blue-grey, so the
+     brand navy reads as ink printed on it. */
+  /* Three grounds, warm and close together. The page reads as one
+     sheet stock in slightly different weights, not as coloured
+     blocks: paper-2 lightest, paper the default, paper-3 a step
+     deeper. Sections alternate between them so no two neighbours
+     share a ground. */
+  --paper:      #EDEAE3;
+  --paper-2:    #F5F3EE;
+  --paper-3:    #E3DED2;
+  --ink:        #10232D;
+  --slate:      #55646C;
+
+  --navy:       #063954;  /* logo gradient darkest stop */
+  --navy-line:  #12506F;
+
+  /* Rules are warm and slightly heavy — printed sheet, not UI border. */
+  --rule:        #D2CCC0;
+  --rule-strong: #ADA496;
+
+  /* The scattered "before": deliberately drained of colour. */
+  --legacy:      #6C7A80;
+  --legacy-soft: #B7BDBA;
+
+  /* The consolidated "after". Teal clears 4.5:1 on paper; the green
+     does not, so green is never a background for text. */
+  --signal:      #10697D;
+  --signal-hover:#0B5162;
+  --green:       #00B884;
+  --green-soft:  #DCF1E8;
+
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body:    "Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --wrap: 1180px;
+  --pad: clamp(20px, 5vw, 52px);
+  --band-y: clamp(64px, 8vw, 104px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 18px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, svg { max-width: 100%; }
+a { color: inherit; }
+
+p { margin: 0 0 1.15em; }
+p:last-child { margin-bottom: 0; }
+
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+.skip { position: absolute; left: -9999px; }
+.skip:focus {
+  left: var(--pad);
+  top: 12px;
+  z-index: 100;
+  background: var(--navy);
+  color: var(--paper-2);
+  padding: 10px 16px;
+}
+
+/* ── The ruled sheet ──────────────────────────────────────
+   Signature element, and load-bearing: the four columns are the
+   measure every light section is set to. Services splits on the
+   first rule, About on the second, the four process steps take
+   one column each and hang their ticks off the rules themselves.
+   If these rules move, those layouts move with them.
+
+   Painting order is the whole trick. The sheet is fixed at
+   z-index 0; light sections carry their paper tone on a ::before
+   at z-index -1, so the tone slides UNDER the rules and they run
+   continuously down every light section instead of stopping at
+   each change of ground. Content sits on .wrap at z-index 1,
+   above the rules. The navy blocks take z-index 1 themselves and
+   so paint over the sheet — those are the beats that break the
+   grid on purpose.
+
+   Consequence worth knowing: main must NOT be positioned with a
+   z-index. Giving it one makes a stacking context and drags the
+   sections' -1 tones back above the sheet, which is exactly the
+   bug this replaced. */
+
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.sheet i {
+  display: block;
+  height: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+  background-image: repeating-linear-gradient(
+    to right, var(--rule) 0 1px, transparent 1px 25%);
+  background-clip: content-box;
+  opacity: 0.55;
+}
+@media (max-width: 720px) { .sheet { display: none; } }
+
+/* Content rides above the rules. */
+.wrap {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+/* A light section's ground, painted below the sheet so the rules
+   carry straight through it. Each section sets its own --tint. */
+.process, .fit { position: relative; background: transparent; }
+.process::before, .fit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--tint);
+}
+
+/* The navy beats. Opaque and above the sheet — the grid stops
+   at them, which is the point. */
+.problem, .cta, .footer { position: relative; z-index: 1; }
+
+/* ── Type ─────────────────────────────────────────────────
+   The whole display system is one variable family worked
+   across its width axis: expanded for headlines, condensed
+   for labels. */
+
+h1, h2, h3 {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 116;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.022em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.label {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 100;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin: 0 0 20px;
+}
+
+.section-head {
+  font-size: clamp(30px, 4.2vw, 46px);
+  max-width: 19ch;
+  margin-bottom: clamp(40px, 5vw, 60px);
+}
+
+/* ── Buttons ──────────────────────────────────────────── */
+
+.btn {
+  display: inline-block;
+  font-family: var(--display);
+  font-variation-settings: "wdth" 104;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1;
+  text-decoration: none;
+  padding: 16px 26px;
+  background: var(--signal);
+  color: #fff;
+  border: 1px solid var(--signal);
+  transition: background-color .15s ease;
+}
+.btn:hover { background: var(--signal-hover); border-color: var(--signal-hover); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--rule-strong);
+}
+.btn-ghost:hover { background: transparent; border-color: var(--ink); }
+
+.btn-sm { padding: 11px 18px; font-size: 14px; }
+
+/* ── Nav ──────────────────────────────────────────────── */
+
+/* Opaque, deliberately. A translucent bar was fine over the paper
+   and awful over the two navy blocks: the tint went muddy and
+   whatever scrolled under it — a heading, the sign-off — smeared
+   through as a legible ghost. There is no tint that reads right on
+   both grounds, so the bar keeps one ground of its own. */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  font-family: var(--display);
+  font-variation-settings: "wdth" 106;
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+.wordmark-light { font-weight: 400; color: var(--signal); margin-left: 4px; }
+.wordmark-mark { width: auto; height: 34px; display: block; }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  font-family: var(--display);
+  font-variation-settings: "wdth" 104;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.nav-links a { text-decoration: none; }
+.nav-links a:not(.btn):hover { color: var(--signal); }
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--rule-strong);
+  cursor: pointer;
+}
+.nav-toggle span {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  margin-inline: auto;
+  background: var(--ink);
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--rule-strong);
+  background: var(--paper-2);
+}
+.menu[hidden] { display: none; }
+.menu a {
+  padding: 16px var(--pad);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ── Hero ─────────────────────────────────────────────────
+   The diagram runs past the right edge of the measure on
+   purpose — the "before" state doesn't fit on the sheet. */
+
+.hero { padding-block: clamp(52px, 7vw, 88px) clamp(56px, 8vw, 96px); }
+
+/* Split on the sheet's centre rule, so the copy occupies the left
+   half of the measure and the diagram starts exactly where the
+   second half does. The gutter is padding inside the figure, not
+   grid gap — a gap would push the split off the rule. */
+.hero-inner {
+  display: grid;
+  grid-template-columns: 50% minmax(0, 1fr);
+  gap: 0;
+  align-items: center;
+}
+
+/* "instead of six." must fit its column on one line at every size.
+   The 34px floor is what makes that true on a 390px phone — at the
+   old 40px the line broke to "instead" / "of six." and the headline
+   arrived as three lines with an orphan in the middle. Check this
+   if the measure or the family changes. */
+.hero h1 {
+  font-size: clamp(34px, 4.4vw, 58px);
+  font-variation-settings: "wdth" 122;
+  font-weight: 800;
+  letter-spacing: -0.036em;
+  line-height: 1;
+  margin-bottom: 26px;
+  text-wrap: normal;
+}
+
+.lede {
+  font-size: clamp(18px, 1.6vw, 21px);
+  color: var(--slate);
+  max-width: 44ch;
+  margin-bottom: 34px;
+}
+
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.hero-figure {
+  margin-right: calc(var(--pad) * -1);
+  padding-left: clamp(20px, 2.4vw, 32px);
+}
+
+/* ── Signature diagram ────────────────────────────────── */
+
+.diagram { margin: 0; }
+
+/* The diagram is a wide-screen device and does not survive a phone
+   column: seven labelled boxes and a fan of curves need horizontal
+   room they simply do not have there. Rather than shrink it into
+   illegibility, it comes off below 620px — the headline and the
+   "Every tool solved one problem" section carry the same argument in
+   words. Dropping it also gets the call to action a full screen
+   higher on a phone. */
+@media (max-width: 620px) {
+  .hero-figure { display: none; }
+}
+
+.d-path {
+  fill: none;
+  stroke: var(--legacy-soft);
+  stroke-width: 1.5;
+}
+
+.d-node rect {
+  fill: var(--paper-2);
+  stroke: var(--legacy-soft);
+  stroke-width: 1.5;
+}
+.d-node text {
+  font-family: var(--mono);
+  font-size: 11px;
+  fill: var(--legacy);
+}
+
+/* Invisible, but still hit-tested — fill:none would not be. */
+.d-hit { fill: transparent; }
+
+.d-spine { stroke: var(--signal); stroke-width: 3; }
+.d-junction { fill: var(--signal); }
+
+/* ── Diagram hover ────────────────────────────────────────
+   The gesture is the argument: touch one of your systems and
+   you see it is already on its way into the single platform.
+   Hover adds emphasis only — every relationship it points at
+   is legible while sitting still, so nothing here is load-
+   bearing for a touch or keyboard visitor. */
+
+.d-link { cursor: default; }
+
+/* Motion only. Nothing here transitions stroke, fill, or opacity:
+   the rows are 34px tall with 22px gaps and SVG hit-testing is
+   per-shape, so the pointer drops out of :hover in every gap. Any
+   colour or opacity change strobes on the way down the column.
+   Movement survives that — it just retargets. */
+.d-node-body,
+.d-path {
+  transition: transform .3s cubic-bezier(.2, .7, .3, 1),
+              stroke-width .3s cubic-bezier(.2, .7, .3, 1);
+}
+
+/* Gated on a real pointer: on a touchscreen a tap latches :hover
+   until you tap elsewhere, which would leave one row lit and the
+   other six dimmed with no way to clear it. */
+@media (hover: hover) and (pointer: fine) {
+
+  /* Drawn toward the junction — the pull is the point, and the
+     row's own path thickens so you can trace where it goes. */
+  .d-link:hover .d-node-body { transform: translateX(7px); }
+  .d-link:hover .d-path { stroke-width: 2.5; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .d-link:hover .d-node-body { transform: none; }
+  }
+}
+
+.d-platform rect {
+  fill: var(--green-soft);
+  stroke: var(--signal);
+  stroke-width: 2;
+}
+.d-platform-label {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 122;
+  font-weight: 800;
+  font-size: 30px;
+  letter-spacing: -0.02em;
+  fill: var(--signal);
+}
+.d-platform-sub { font-family: var(--mono); font-size: 12px; fill: var(--signal); }
+
+figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  margin-top: 18px;
+  padding-right: var(--pad);
+  font-family: var(--display);
+  font-variation-settings: "wdth" 100;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+/* Keys are outlined boxes and solid fills respectively, matching
+   how the nodes and the platform are actually drawn above. */
+.key { width: 12px; height: 12px; display: inline-block; }
+.key-before { background: var(--paper-2); border: 1.5px solid var(--legacy-soft); }
+.key-after  { background: var(--green-soft); border: 2px solid var(--signal); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .d-node { opacity: 0; animation: nodeIn .5s ease forwards; }
+  .d-link:nth-child(1) .d-node { animation-delay: .10s; }
+  .d-link:nth-child(2) .d-node { animation-delay: .17s; }
+  .d-link:nth-child(3) .d-node { animation-delay: .24s; }
+  .d-link:nth-child(4) .d-node { animation-delay: .31s; }
+  .d-link:nth-child(5) .d-node { animation-delay: .38s; }
+  .d-link:nth-child(6) .d-node { animation-delay: .45s; }
+  .d-link:nth-child(7) .d-node { animation-delay: .52s; }
+
+  .d-path {
+    stroke-dasharray: 320;
+    stroke-dashoffset: 320;
+    animation: draw .9s ease forwards .55s;
+  }
+  .d-spine, .d-junction, .d-platform {
+    opacity: 0;
+    animation: fadeUp .6s ease forwards 1.35s;
+  }
+
+  @keyframes nodeIn { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: none; } }
+  @keyframes draw   { to { stroke-dashoffset: 0; } }
+  @keyframes fadeUp { from { opacity: 0; } to { opacity: 1; } }
+}
+
+/* ── Section reveal ───────────────────────────────────────
+   Deliberately under-played: 10px of travel and a fade, once,
+   on the section's contents. The band backgrounds never move
+   or fade — animating those would make the seam between the
+   paper and the navy visibly slide, which reads as a page
+   still loading rather than a page responding.
+
+   Everything is scoped to .js-reveal (set in the head only if
+   IntersectionObserver exists), so with no JS the sections are
+   simply visible and nothing is ever stuck at opacity 0. */
+
+.js-reveal .reveal {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .3, 1);
+}
+.js-reveal .reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal .reveal {
+    transition-duration: .01ms;
+    transform: none;
+  }
+}
+
+/* ── Bands ────────────────────────────────────────────── */
+
+.band { padding-block: var(--band-y); }
+
+/* ── Problem — navy, early, so the page isn't a flat wash
+      until the footer. This is the "here's your mess" beat
+      and it carries the most weight on the page. ───────── */
+
+.problem {
+  background: var(--navy);
+  color: #DCE7EC;
+}
+.problem .label { color: #7FA5B5; }
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: start;
+}
+.problem-grid h2 {
+  font-size: clamp(28px, 3.8vw, 42px);
+  color: #fff;
+}
+
+.cost-list {
+  list-style: none;
+  margin: clamp(44px, 5vw, 64px) 0 0;
+  padding: 0;
+  border-top: 1px solid var(--navy-line);
+}
+.cost-list li {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 6px 28px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--navy-line);
+  color: #C3D5DD;
+}
+/* Sentence case, near-white, at reading size. Small tracked-out green
+   caps were the previous treatment and were genuinely hard to read on
+   navy — keep the label the brightest thing in the row. */
+.cost-label {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 108;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+/* ── Services — a ruled list, not a row of cards. The label
+      sits out in the margin like a marginal note. ──────── */
+
+.work { list-style: none; margin: 0; padding: 0; }
+
+/* One column for the marginal label, three for the work. The split
+   lands on the sheet's first rule, which is the whole reason the
+   label column is a quarter and not the 0.42fr it used to be —
+   that measured a third of the page out to hold one 12px word,
+   and lined up with nothing. Gutter is padding on the body so the
+   split stays welded to the rule. */
+.work-item {
+  display: grid;
+  grid-template-columns: 25% minmax(0, 1fr);
+  gap: 16px 0;
+  align-items: start;
+  padding-block: clamp(30px, 3.6vw, 44px);
+  border-top: 1px solid var(--rule-strong);
+}
+.work-item:last-child { border-bottom: 1px solid var(--rule-strong); }
+.work-item > div { padding-left: clamp(20px, 2.4vw, 32px); }
+/* The two kinds of work are the section's real subheads, so they
+   get more weight than an ordinary .label. */
+.work-kind {
+  margin: 0;
+  padding-top: 6px;
+  font-family: var(--display);
+  font-variation-settings: "wdth" 100;
+  font-size: clamp(16px, 1.6vw, 19px);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--signal);
+}
+.work-item h3 {
+  font-size: clamp(23px, 2.6vw, 30px);
+  margin-bottom: 14px;
+  max-width: 20ch;
+}
+.work-item p { color: var(--slate); max-width: 58ch; }
+
+/* ── Process — a real sequence, so it gets a measured
+      timeline: one continuous rule with ticks. ────────── */
+
+/* Sits a step deeper than "Solutions" above it and "About Us"
+   below, so the three read as separate sections.
+   Set as --tint, not background: the ground is painted by the
+   ::before under the sheet so the column rules run through it. */
+.process { --tint: var(--paper-3); }
+
+.steps {
+  --step-gap: clamp(24px, 3vw, 40px);
+
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  border-top: 2px solid var(--ink);
+}
+
+/* The columns are butted together and the gutter is padding INSIDE
+   each item, not grid gap. It looks identical, but it means the four
+   hover targets tile the rule with no dead space between them — a
+   marker travelling along the bar would otherwise fall into every
+   gutter and snap back to the start. Last item drops the padding so
+   the row still ends flush with the measure. */
+.steps li {
+  position: relative;
+  padding: 30px var(--step-gap) 0 0;
+}
+.steps li:last-child { padding-right: 0; }
+
+/* Below the bead's threshold the grid wraps to two columns or one,
+   where a right padding on every item but the last would give the
+   stacked steps an uneven measure. No bead down here, so the gutter
+   goes back to being an ordinary grid gap. */
+@media (max-width: 1023px) {
+  .steps { column-gap: var(--step-gap); }
+  .steps li { padding-right: 0; }
+}
+.steps li::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 14px;
+  background: var(--ink);
+}
+/* ── Progress indicator ───────────────────────────────────
+   A teal fill that runs along the timeline rule up to the step
+   you are pointing at, so moving across the row feels like
+   advancing through the process rather than browsing four
+   unrelated cards.
+
+   It only exists once all four steps are actually side by side.
+   The grid is auto-fit, so below ~1024px it wraps to two rows or
+   one column and "25% along the bar" stops meaning "step one" —
+   the fill would then point at the wrong step, which is worse
+   than no fill at all. */
+
+/* The bead is driven entirely by :has(). Without it the dot would
+   render and never move — a marker stuck on step one reads as broken,
+   which is worse than no marker. So the whole thing is behind a
+   support query and simply does not exist where it cannot work. */
+@supports selector(:has(*)) {
+@media (min-width: 1024px) {
+  /* A bead riding the rule. It parks on step one's tick at rest, so
+     the indicator is present before you touch anything, and slides
+     to whichever step you point at.
+
+     The ring is the section's own ground, not a border: it cuts a
+     gap between the bead and the ink rule so the bead reads as
+     sitting ON the timeline rather than being threaded through it.
+     If the process section's background ever changes, this changes
+     with it. */
+  .steps::after {
+    content: "";
+    position: absolute;
+    top: -6px;          /* centres a 10px bead on the 2px rule */
+    left: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--signal);
+    box-shadow: 0 0 0 3px var(--paper-3);
+    pointer-events: none;
+    transition: left .6s cubic-bezier(.25, .6, .3, 1);
+  }
+
+  /* The columns are exactly quarters now that the gutter lives
+     inside each item, so each tick sits on a clean 25% boundary.
+     The -5px re-centres the bead on the tick; step one stays flush
+     at 0 so the bead never hangs off the start of the measure. */
+  .steps:has(li:nth-child(2):hover)::after { left: calc(25% - 5px); }
+  .steps:has(li:nth-child(3):hover)::after { left: calc(50% - 5px); }
+  .steps:has(li:nth-child(4):hover)::after { left: calc(75% - 5px); }
+
+  /* The tick of the step you are on stands up off the rule, kept a
+     little quicker than the bead so it reads as arrival, not lag. */
+  .steps li::before { transition: height .4s cubic-bezier(.25, .6, .3, 1); }
+  .steps li:hover::before { height: 24px; }
+}
+}
+
+/* The same end-state removal as .no-motion, for the visitor who has
+   asked for reduced motion but has no JS to set that class. */
+@media (prefers-reduced-motion: reduce) {
+  .steps::after,
+  .steps li::before { transition-duration: .01ms; }
+  .steps::after { display: none; }
+  .steps li:hover::before { height: 14px; }
+  .d-link:hover .d-path { stroke-width: 1.5; }
+}
+
+/* ── Motion kill switch ───────────────────────────────────
+   Set on <html> when the page decides motion is a bad idea here:
+   the visitor asked for reduced motion, asked the browser to save
+   data, or the device measurably could not keep up with a short
+   frame-rate probe. See the head of index.html.
+
+   This turns motion OFF, never content. Anything that starts at
+   opacity 0 is revealed before this class is applied, so killing
+   animation can never leave the page blank — the failure we already
+   shipped once. */
+.no-motion *,
+.no-motion *::before,
+.no-motion *::after {
+  animation: none !important;
+  transition: none !important;
+}
+/* Nothing should be mid-travel when motion is cut. */
+.no-motion .reveal { opacity: 1 !important; transform: none !important; }
+.no-motion .steps .step-body { opacity: 1 !important; transform: none !important; }
+.no-motion .d-node { opacity: 1 !important; }
+.no-motion .d-path { stroke-dashoffset: 0 !important; }
+.no-motion .d-spine,
+.no-motion .d-junction,
+.no-motion .d-platform { opacity: 1 !important; }
+/* The bead has nothing to indicate if it cannot travel. */
+.no-motion .steps::after { display: none; }
+
+/* Killing the transitions above only removes the TWEEN. The hover
+   states themselves still apply, so a step still jumped a scale up
+   and a diagram row still snapped sideways — an untweened effect is
+   more jarring than the animated one, not less, and it is the thing
+   you actually see on a machine with Windows animations off. So the
+   end states come off too: with motion cut, pointing at something
+   changes nothing about where it is or how big it is. */
+html.no-motion { scroll-behavior: auto; }
+
+.no-motion .d-link:hover .d-node-body,
+.no-motion .steps li:hover .step-body { transform: none !important; }
+.no-motion .d-link:hover .d-path { stroke-width: 1.5 !important; }
+.no-motion .steps li:hover::before { height: 14px !important; }
+
+.step-num {
+  display: block;
+  font-family: var(--display);
+  font-variation-settings: "wdth" 100;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--signal);
+  margin-bottom: 16px;
+}
+.steps h3 { font-size: 22px; margin-bottom: 10px; }
+.steps p { color: var(--slate); font-size: 16.5px; }
+
+/* ── Step motion ──────────────────────────────────────────
+   Everything moves .step-body, never the <li>: the li carries
+   the ::before tick that hangs off the timeline rule, and
+   transforming it would drag the tick away from the rule it
+   is supposed to be welded to.
+
+   Growth is from the top-left corner, so a step expands down
+   and into its own column's gap rather than pushing toward
+   its neighbour. Transform and opacity only — no colour
+   changes, which strobe on a pointer crossing between items. */
+
+.step-body {
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+/* Entry: the four arrive in order, each a beat behind the last.
+   The delays are keyed off the parent section getting .is-in, so
+   the sequence starts when the section does — the heading settles
+   first, then the steps count in under it. */
+.js-reveal .steps .step-body {
+  opacity: 0;
+  transform: translateY(12px) scale(.97);
+  transition: opacity .5s ease, transform .55s cubic-bezier(.2, .7, .3, 1);
+}
+.js-reveal .reveal.is-in .steps .step-body {
+  opacity: 1;
+  transform: none;
+}
+.js-reveal .reveal.is-in .steps li:nth-child(1) .step-body { transition-delay: .10s; }
+.js-reveal .reveal.is-in .steps li:nth-child(2) .step-body { transition-delay: .22s; }
+.js-reveal .reveal.is-in .steps li:nth-child(3) .step-body { transition-delay: .34s; }
+.js-reveal .reveal.is-in .steps li:nth-child(4) .step-body { transition-delay: .46s; }
+
+@media (hover: hover) and (pointer: fine) {
+  /* Hover growth has to override the entry rule's transform, hence
+     the matching specificity. Zero delay so it answers immediately
+     rather than inheriting the stagger it was revealed with. */
+  .js-reveal .reveal.is-in .steps li:hover .step-body,
+  .steps li:hover .step-body {
+    transform: scale(1.035);
+    transition-delay: 0s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal .steps .step-body,
+  .js-reveal .reveal.is-in .steps li:nth-child(n) .step-body {
+    transition-duration: .01ms;
+    transition-delay: 0s;
+    transform: none;
+  }
+  .steps li:hover .step-body { transform: none; }
+}
+
+/* ── Fit ─────────────────────────────────────────────── */
+
+.fit { --tint: var(--paper-2); }
+
+/* Stacked by default, two columns split on the sheet's centre rule
+   once there is room. Explicitly two, not auto-fit: with the gutter
+   moved into the items (so the split can sit ON the rule) auto-fit
+   sees enough width for three tracks and breaks the alignment. */
+.signals {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+@media (min-width: 860px) {
+  .signals { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Odd items only — an even item's mark has to stay flush to the
+     centre rule the way an odd one is flush to the left. */
+  .signals li:nth-child(odd) { padding-right: clamp(28px, 4vw, 64px); }
+}
+.signals li {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  padding-block: 18px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 17.5px;
+  line-height: 1.5;
+}
+
+/* A dash, in the drained "before" grey. These were green check
+   marks, which broke the page's one colour rule twice over: green
+   means the consolidated after, and every item in this list is a
+   symptom of the before. Six approving ticks under six things that
+   are wrong with your setup read as a feature list. A dash just
+   marks the line. */
+.tick {
+  width: 20px;
+  height: 20px;
+  margin-top: 3px;
+  fill: none;
+  stroke: var(--legacy);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fit-close {
+  margin-top: clamp(40px, 5vw, 56px);
+  max-width: 52ch;
+  font-family: var(--display);
+  font-variation-settings: "wdth" 108;
+  font-weight: 500;
+  font-size: clamp(19px, 2.2vw, 25px);
+  line-height: 1.4;
+  letter-spacing: -0.015em;
+}
+
+/* ── About ────────────────────────────────────────────── */
+
+/* Masthead left, body right, split on the centre rule like the hero
+   — the two halves of the page that are somebody talking to you. */
+.about-grid {
+  display: grid;
+  grid-template-columns: 50% minmax(0, 1fr);
+  gap: 24px 0;
+  align-items: start;
+}
+.about-grid h2 { font-size: clamp(30px, 4.2vw, 46px); max-width: 12ch; }
+.about-body {
+  padding-left: clamp(20px, 2.4vw, 32px);
+  color: var(--slate);
+  max-width: 60ch;
+}
+
+/* Sits under the heading as part of the masthead, not floated
+   loose in the body copy. */
+.place {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule-strong);
+  /* Half the masthead column, which is a quarter of the measure —
+     so the rule stops dead on the sheet's first column rule instead
+     of ending wherever the words happen to run out. */
+  width: 50%;
+  white-space: nowrap;
+  font-family: var(--display);
+  font-variation-settings: "wdth" 104;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--slate);
+}
+
+/* Founder intro: its own subhead under the company copy, with a
+   photo slot that holds initials until the headshot is in. */
+.founder {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid var(--rule-strong);
+}
+.founder-photo {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: var(--navy);
+  color: #DCE7EC;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: 0.04em;
+}
+.founder-photo img { width: 100%; height: 100%; object-fit: cover; }
+.founder h3 { font-size: clamp(21px, 2.2vw, 25px); color: var(--ink); margin: 2px 0 2px; }
+.founder-role {
+  margin: 0 0 12px;
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* ── CTA ──────────────────────────────────────────────── */
+
+.cta {
+  background: var(--navy);
+  color: #DCE7EC;
+  padding-block: clamp(72px, 9vw, 124px);
+}
+.cta h2 {
+  font-size: clamp(32px, 5.2vw, 58px);
+  font-variation-settings: "wdth" 122;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  color: #fff;
+  max-width: 16ch;
+  margin-bottom: 20px;
+}
+.cta p {
+  max-width: 50ch;
+  margin-bottom: 40px;
+  color: #A8C2CD;
+}
+
+/* The address is set as type, not packaged in a button — it reads
+   as a person you can write to rather than a conversion widget. */
+.mailto {
+  display: inline-block;
+  font-family: var(--display);
+  font-variation-settings: "wdth" 112;
+  font-weight: 700;
+  font-size: clamp(20px, 3.2vw, 34px);
+  letter-spacing: -0.025em;
+  color: #fff;
+  text-decoration: none;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--green);
+  word-break: break-word;
+  transition: border-color .15s ease, color .15s ease;
+}
+.mailto:hover { color: var(--green); }
+
+/* ── Contact form ─────────────────────────────────────── */
+
+.contact-form {
+  max-width: 640px;
+  display: grid;
+  gap: 18px;
+}
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.field { display: grid; gap: 8px; }
+.field span {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 100;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #DCE7EC;
+}
+.field em { font-style: normal; font-weight: 400; text-transform: none; letter-spacing: 0; color: #8FA9B6; }
+.field input,
+.field textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 17px;
+  color: #fff;
+  background: #0A4563;
+  border: 1px solid var(--navy-line);
+  border-bottom: 2px solid #3E7590;
+  border-radius: 0;
+  padding: 12px 14px;
+  transition: border-color .15s ease;
+}
+.field textarea { resize: vertical; min-height: 130px; }
+.field input:focus,
+.field textarea:focus { outline: none; border-bottom-color: var(--green); }
+.cta :focus-visible { outline-color: var(--green); }
+
+.cta p.form-note { font-size: 15px; margin: 0; color: #8FA9B6; }
+
+/* Teal on navy is too quiet for the one action in the section. */
+.btn-light {
+  justify-self: start;
+  background: #fff;
+  color: var(--navy);
+  border-color: #fff;
+  cursor: pointer;
+}
+.btn-light:hover { background: var(--green-soft); border-color: var(--green-soft); }
+
+.hp { position: absolute; left: -9999px; }
+
+.cta p.cta-alt { margin: 36px 0 0; font-size: 16px; }
+.cta-alt a { color: #fff; text-decoration-color: var(--green); text-underline-offset: 3px; }
+.cta-alt a:hover { color: var(--green); }
+
+/* ── Thank-you page ───────────────────────────────────── */
+
+.thanks { min-height: 62vh; display: flex; align-items: center; }
+.thanks .btn { margin-top: 8px; }
+
+/* ── Footer ───────────────────────────────────────────── */
+
+.footer {
+  background: var(--navy);
+  color: #8FA9B6;
+  border-top: 1px solid var(--navy-line);
+  padding-block: 30px;
+  font-family: var(--display);
+  font-variation-settings: "wdth" 102;
+  font-size: 13.5px;
+}
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  justify-content: space-between;
+}
+
+/* ── Responsive ───────────────────────────────────────── */
+
+@media (max-width: 980px) {
+  .hero-inner,
+  .problem-grid,
+  .about-grid,
+  .work-item { grid-template-columns: minmax(0, 1fr); }
+
+  /* Stacked, there is no second column to indent away from, so every
+     gutter that was holding a split on a rule comes off. Leaving them
+     would just indent the body copy of three sections for no reason. */
+  .work-item > div,
+  .about-body { padding-left: 0; }
+
+  /* Headline leads on narrow screens; the diagram follows the copy
+     rather than opening with a shrunken graphic. */
+  .hero-figure { margin: 8px 0 0; padding-left: 0; }
+  /* No max-height: capping the height shrank the whole drawing, which
+     is what made the labels look small enough to need a font bump —
+     and that bump then overflowed the boxes. Let it use the column
+     width it has and the 11px labels scale up on their own. */
+  .diagram-wide { max-width: 640px; }
+  .work-kind { padding-top: 0; }
+  /* Stacked, the single top rule can't span the sequence, so each
+     step carries its own rule and the tick marks come off. */
+  /* Row gap stays 0 — each item's own rule provides the separation —
+     but the columns still need a gutter. Zeroing both let the text of
+     a two or three across row run straight into its neighbour. */
+  .steps { gap: 0 var(--step-gap); border-top: none; }
+  .steps li { border-top: 2px solid var(--ink); padding-bottom: 28px; }
+  .steps li::before { display: none; }
+}
+
+@media (max-width: 720px) {
+  body { font-size: 17px; }
+  .nav-links { display: none; }
+  .nav-toggle { display: flex; }
+  .cost-list li { grid-template-columns: minmax(0, 1fr); }
+
+  /* The old font bump lived here — 17px node labels in 140-unit boxes,
+     which overflowed the three longest names. The narrow-column
+     drawing solves the same problem properly: its own viewBox is
+     sized so the labels are legible at their natural size. */
+
+  .mailto { font-size: 17px; }
+  .field-row { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Two buttons sized by their own labels sat ragged in a phone column —
+   a wide one over a narrow one, neither reaching the measure. Full
+   width each, so the pair reads as one stacked block. */
+@media (max-width: 420px) {
+  .hero-actions { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .hero-actions .btn { text-align: center; }
+  .btn-light { justify-self: stretch; text-align: center; }
+}

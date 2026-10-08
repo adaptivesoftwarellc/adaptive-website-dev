@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adaptive Software</title>
+<meta name="description" content="Adaptive Software builds custom software that consolidates scattered tools, spreadsheets, and legacy records into a single application your team actually uses.">
+<link rel="canonical" href="https://adaptivesoftwarellc.com/">
+
+<meta property="og:title" content="Adaptive Software · Smarter systems start here">
+<meta property="og:description" content="Custom software for workflow consolidation and data management.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://adaptivesoftwarellc.com/">
+<meta property="og:site_name" content="Adaptive Software">
+<meta property="og:image" content="https://adaptivesoftwarellc.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Adaptive Software — one system instead of six.">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Adaptive Software · Smarter systems start here">
+<meta name="twitter:description" content="Custom software for workflow consolidation and data management.">
+<meta name="twitter:image" content="https://adaptivesoftwarellc.com/assets/og-image.png">
+
+<meta name="theme-color" content="#063954">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/mark.svg">
+<link rel="stylesheet" href="styles.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Adaptive Software",
+  "url": "https://adaptivesoftwarellc.com/",
+  "logo": "https://adaptivesoftwarellc.com/assets/AdaptiveSoftware_Primary.svg",
+  "image": "https://adaptivesoftwarellc.com/assets/og-image.png",
+  "description": "Adaptive Software builds custom software that consolidates scattered tools, spreadsheets, and legacy records into a single application your team actually uses.",
+  "email": "info@adaptivesoftwarellc.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Lafayette",
+    "addressRegion": "LA",
+    "addressCountry": "US"
+  },
+  "founder": {
+    "@type": "Person",
+    "name": "Brandon Do"
+  },
+  "areaServed": "US"
+}
+</script>
+
+<!-- The whole reveal lives here, inline, on purpose.
+
+     It must be in the head because the start state is opacity 0 and
+     has to be armed before first paint — arming it from script.js at
+     the end of <body> would paint the sections, hide them, then fade
+     them back in.
+
+     It must be in the SAME FILE as the arming because index.html,
+     styles.css and script.js are cached independently for 10 minutes
+     each. When the hiding lived here and the revealing lived in
+     script.js, a visitor holding a stale script.js alongside fresh
+     HTML and CSS got sections armed at opacity 0 that nothing ever
+     turned back on — a blank page that looks like broken JS. Hiding
+     and revealing now ship together or not at all.
+
+     Belt and braces on top of that: any failure — an exception, a
+     browser without IntersectionObserver, an observer that somehow
+     never fires — ends with everything visible. Content is never
+     left depending on script that might not run. -->
+<script>
+(function () {
+  var DOC = document.documentElement;
+
+  function revealAll() {
+    DOC.classList.remove('js-reveal');
+    var els = document.querySelectorAll('.reveal');
+    for (var i = 0; i < els.length; i++) els[i].classList.add('is-in');
+  }
+
+  if (!('classList' in DOC) || !window.requestAnimationFrame) return;
+
+  DOC.classList.add('js-reveal');
+
+  // If anything below throws, this puts the page back to plain
+  // visible rather than leaving it blank.
+  var failsafe = setTimeout(revealAll, 3000);
+
+  function start() {
+    try {
+      var els = [].slice.call(document.querySelectorAll('.reveal'));
+      if (!els.length) { clearTimeout(failsafe); return; }
+
+      // A position sweep, not an IntersectionObserver. The observer
+      // only reports a CHANGE in intersection across a rendered
+      // frame, so jumping the page — a nav anchor, a restored scroll
+      // position, a flick to the bottom — skips sections without ever
+      // producing a callback, and they stay invisible for the whole
+      // visit. Reading position directly cannot miss: anything at or
+      // above the trigger line is revealed, whether we scrolled
+      // through it or teleported past it.
+      //
+      // The 0.88 is the old rootMargin: a section starts once it is
+      // properly into the viewport, not the instant it clears the
+      // edge. Revealed elements are dropped from the list, so the
+      // work shrinks to nothing as the page is read.
+      function sweep() {
+        var h = window.innerHeight || DOC.clientHeight;
+        for (var i = els.length - 1; i >= 0; i--) {
+          if (els[i].getBoundingClientRect().top < h * 0.88) {
+            els[i].classList.add('is-in');
+            els.splice(i, 1);
+          }
+        }
+        if (!els.length) {
+          window.removeEventListener('scroll', onScroll);
+          window.removeEventListener('resize', onScroll);
+        }
+      }
+
+      var ticking = false;
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(function () { ticking = false; sweep(); });
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      window.addEventListener('load', sweep);
+      sweep();
+
+      clearTimeout(failsafe);
+    } catch (e) {
+      clearTimeout(failsafe);
+      revealAll();
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
+  }
+
+  // ── Motion kill switch ────────────────────────────────────────
+  // Three questions, cheapest first.
+  //
+  // Two can be answered up front: has the visitor asked for reduced
+  // motion, and have they asked the browser to save data. The third —
+  // will this animation actually be smooth here — has no API. Nothing
+  // reports "this device will drop frames." So we measure instead:
+  // sample real frames for a short window and, if the device is not
+  // keeping up, cut motion for the rest of the visit.
+  //
+  // ORDER MATTERS. killMotion() calls revealAll() FIRST, so content is
+  // visible before transitions are disabled. Disabling transitions on
+  // an element still sitting at opacity 0 would freeze it there
+  // permanently — the blank-page bug again, arriving by a new route.
+  function killMotion() {
+    revealAll();
+    DOC.classList.add('no-motion');
+  }
+
+  try {
+    var nav = navigator;
+    var asked = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var saving = nav.connection && nav.connection.saveData;
+
+    if (asked || saving) {
+      killMotion();
+      return;
+    }
+
+    // Frame-rate probe. Watches ~20 frames, then compares how many
+    // arrived against how many should have in that wall-clock time.
+    // Below 45% of the expected rate the page is visibly stuttering,
+    // so motion stops being decoration and starts being a cost.
+    // Deliberately generous: this should catch a genuinely struggling
+    // device, not a browser that hitched once while fonts landed.
+    var frames = 0, first = 0, last = 0;
+    function tick(now) {
+      if (!first) first = now;
+      last = now;
+      frames++;
+      if (frames < 20) {
+        window.requestAnimationFrame(tick);
+        return;
+      }
+      var elapsed = last - first;
+      if (elapsed > 0) {
+        var fps = (frames - 1) / (elapsed / 1000);
+        if (fps < 27) killMotion();   // 45% of a 60Hz budget
+      }
+    }
+    window.requestAnimationFrame(tick);
+  } catch (e) {
+    // A broken probe must never cost anyone the page.
+  }
+})();
+</script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- The ruled sheet the whole page is set on. Decorative; sections
+     that need to break the grid simply paint over it. -->
+<div class="sheet" aria-hidden="true"><i></i></div>
+
+<header class="nav" id="top">
+  <div class="wrap nav-inner">
+    <!-- Mark is real brand artwork. The wordmark is HTML type, not the logo's own
+         text, because that text is live Pepi and won't render on visitors' machines. -->
+    <a class="wordmark" href="#top" aria-label="Adaptive Software, home">
+      <img class="wordmark-mark" src="assets/mark.svg" alt="" width="20" height="34">
+      <span>Adaptive<span class="wordmark-light">Software</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#services">Solutions</a>
+      <a href="#process">Our Process</a>
+      <a href="#about">About Us</a>
+      <a class="btn btn-sm" href="#contact">Contact</a>
+    </nav>
+
+    <button class="nav-toggle" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
+      <span></span><span></span>
+    </button>
+  </div>
+
+  <div class="menu" id="menu" hidden>
+    <a href="#services">Solutions</a>
+    <a href="#process">Our Process</a>
+    <a href="#about">About Us</a>
+    <a href="#contact">Contact</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="wrap hero-inner">
+
+      <div class="hero-copy">
+        <p class="label">Custom software · Data &amp; workflow</p>
+        <h1>Smarter systems start here.</h1>
+        <p class="lede">
+          Most teams aren't short on software. They have too many systems that don't share
+          information. We replace them with one application built around how you work, and
+          bring your existing data with it.
+        </p>
+        <div class="hero-actions">
+          <a class="btn" href="#contact">Get in touch</a>
+          <a class="btn btn-ghost" href="#problem">Learn More</a>
+        </div>
+      </div>
+
+      <div class="hero-figure">
+        <figure class="diagram" aria-labelledby="diagram-caption">
+          <!-- 560 units across. That is why the whole figure is hidden
+               below 620px in the stylesheet rather than scaled down: in a
+               ~300px phone column these labels land at about 6px, and
+               bumping the font to compensate — which is what this used to
+               do — pushed "Billing & claims" and "Legacy database" clean
+               out of their boxes. -->
+          <svg class="diagram-wide" viewBox="0 0 560 400" role="img" aria-label="Seven separate systems converging into one platform: practice management, billing, scheduling, spreadsheets, fax and scans, paper charts, and a legacy database.">
+            <!-- Each row is one .d-link so a hover can light the node and its
+                 own path together. The <rect> inside .d-hit is a transparent
+                 hover target: without it only the 1.5px stroke and the glyphs
+                 are hoverable, and the row flickers as the pointer crosses it.
+                 .d-node-body exists because .d-node carries the entry
+                 animation, and an animation's forwards fill would beat any
+                 transform we put on the same element. -->
+            <g class="d-links">
+              <g class="d-link">
+                <path class="d-path" d="M158,29 C255,29 250,200 336,200"/>
+                <g class="d-node"><g class="d-node-body"><rect x="8" y="12" width="150" height="34" rx="4"/><text x="20" y="33">Practice Management</text></g></g>
+                <rect class="d-hit" x="8" y="12" width="328" height="34"/>
+              </g>
+              <g class="d-link">
+                <path class="d-path" d="M158,85 C255,85 250,200 336,200"/>
+                <g class="d-node"><g class="d-node-body"><rect x="8" y="68" width="150" height="34" rx="4"/><text x="20" y="89">Billing &amp; Claims</text></g></g>
+                <rect class="d-hit" x="8" y="68" width="328" height="34"/>
+              </g>
+              <g class="d-link">
+                <path class="d-path" d="M158,141 C255,141 250,200 336,200"/>
+                <g class="d-node"><g class="d-node-body"><rect x="8" y="124" width="150" height="34" rx="4"/><text x="20" y="145">Scheduling</text></g></g>
+                <rect class="d-hit" x="8" y="124" width="328" height="34"/>
+              </g>
+              <g class="d-link">
+                <path class="d-path" d="M158,197 C255,197 250,200 336,200"/>
+                <g class="d-node"><g class="d-node-body"><rect x="8" y="180" width="150" height="34" rx="4"/><text x="20" y="201">Spreadsheets</text></g></g>
+                <rect class="d-hit" x="8" y="180" width="328" height="34"/>
+              </g>
+              <g class="d-link">
+                <path class="d-path" d="M158,253 C255,253 250,200 336,200"/>
+                <g class="d-node"><g class="d-node-body"><rect x="8" y="236" width="150" height="34" rx="4"/><text x="20" y="257">Fax &amp; Scans</text></g></g>
+                <rect class="d-hit" x="8" y="236" width="328" height="34"/>
+              </g>
+              <g class="d-link">
+                <path class="d-path" d="M158,309 C255,309 250,200 336,200"/>
+                <g class="d-node"><g class="d-node-body"><rect x="8" y="292" width="150" height="34" rx="4"/><text x="20" y="313">Paper Charts</text></g></g>
+                <rect class="d-hit" x="8" y="292" width="328" height="34"/>
+              </g>
+              <g class="d-link">
+                <path class="d-path" d="M158,365 C255,365 250,200 336,200"/>
+                <g class="d-node"><g class="d-node-body"><rect x="8" y="348" width="150" height="34" rx="4"/><text x="20" y="369">Legacy Database</text></g></g>
+                <rect class="d-hit" x="8" y="348" width="328" height="34"/>
+              </g>
+            </g>
+
+            <line class="d-spine" x1="336" y1="200" x2="404" y2="200"/>
+            <circle class="d-junction" cx="336" cy="200" r="5"/>
+
+            <!-- Both lines are anchored to the box's own centre (404 + 148/2)
+                 and the baselines are set so the two-line block sits optically
+                 centred in the 160 to 240 band. -->
+            <g class="d-platform">
+              <rect x="404" y="160" width="148" height="80" rx="8"/>
+              <text x="478" y="198" text-anchor="middle" class="d-platform-label">ONE</text>
+              <text x="478" y="222" text-anchor="middle" class="d-platform-sub">application</text>
+            </g>
+          </svg>
+
+          <figcaption id="diagram-caption">
+            <span class="key key-before"></span> What you're running now
+            <span class="key key-after"></span> What we build
+          </figcaption>
+        </figure>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── The problem ──────────────────────────────────────── -->
+  <section class="band problem" id="problem">
+    <div class="wrap reveal">
+      <p class="label">The situation we usually walk into</p>
+      <div class="problem-grid">
+        <h2>Too many systems, and none of them connected.</h2>
+        <div class="problem-body">
+          <p>
+            Most organizations add software one need at a time: a scheduler, a billing
+            portal, a few spreadsheets, and an older records system that still holds
+            important history.
+          </p>
+          <p>
+            Each tool works on its own. Together, they mean several logins to answer one
+            question, the same information entered more than once, and reports that are only
+            as accurate as the last manual update.
+          </p>
+        </div>
+      </div>
+
+      <ul class="cost-list">
+        <li><span class="cost-label">Double entry</span> The same information is entered into several systems.</li>
+        <li><span class="cost-label">Conflicting reports</span> Two reports disagree, and no one is sure which is correct.</li>
+        <li><span class="cost-label">Hard-to-reach records</span> Older records are kept but can't easily be searched.</li>
+        <li><span class="cost-label">Overlapping costs</span> Several subscriptions, each charging for the same users.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Fit ──────────────────────────────────────────────── -->
+  <!-- Follows the problem on purpose: the problem describes the
+       situation, this asks the reader whether it's theirs. -->
+  <section class="band fit" id="fit">
+    <div class="wrap reveal">
+      <p class="label">Is this you?</p>
+      <h2 class="section-head">Sound familiar?</h2>
+
+      <ul class="signals">
+        <li>
+          <svg class="tick" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h14"/></svg>
+          <span>More than three systems that don't share information.</span>
+        </li>
+        <li>
+          <svg class="tick" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h14"/></svg>
+          <span>The same information gets entered twice because nothing syncs.</span>
+        </li>
+        <li>
+          <svg class="tick" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h14"/></svg>
+          <span>Answering a simple question means checking several systems.</span>
+        </li>
+        <li>
+          <svg class="tick" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h14"/></svg>
+          <span>Your oldest records are kept, but no one can easily search them.</span>
+        </li>
+        <li>
+          <svg class="tick" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h14"/></svg>
+          <span>A spreadsheet holds the only copy of something you can't lose.</span>
+        </li>
+        <li>
+          <svg class="tick" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h14"/></svg>
+          <span>Your vendor will never add the report you need.</span>
+        </li>
+      </ul>
+
+      <p class="fit-close">
+        If two or more apply, there's likely a better way to work. We'll talk it through
+        with you, and we'll be honest if building something isn't the right answer.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Services ─────────────────────────────────────────── -->
+  <section class="band" id="services">
+    <div class="wrap reveal">
+      <p class="label">Solutions</p>
+      <h2 class="section-head">Two ways we help, usually in this order.</h2>
+
+      <ul class="work">
+        <li class="work-item">
+          <p class="work-kind">Consolidation</p>
+          <div>
+            <h3>One application instead of many</h3>
+            <p>
+              We learn how work actually moves through your team, then build a single
+              application that supports it from start to finish. Fewer logins, one source of
+              truth, and no re-entering information between systems.
+            </p>
+          </div>
+        </li>
+
+        <li class="work-item">
+          <p class="work-kind">Custom Builds</p>
+          <div>
+            <h3>Software for what's missing</h3>
+            <p>
+              When off-the-shelf software almost fits, we build the rest: integrations
+              between systems, internal tools, and the reports your current vendor doesn't
+              offer.
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Process (a real sequence, hence numbered) ─────────── -->
+  <section class="band process" id="process">
+    <div class="wrap reveal">
+      <p class="label">Our Process</p>
+      <h2 class="section-head">Four steps. You see working software in the first month.</h2>
+
+      <ol class="steps">
+        <li>
+          <div class="step-body">
+            <span class="step-num">01</span>
+            <h3>Map</h3>
+            <p>We sit with the people doing the work and document every system, handoff, and
+               workaround. You get the map whether or not you hire us for the rest.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-body">
+            <span class="step-num">02</span>
+            <h3>Build</h3>
+            <p>We build in small pieces you can use and give feedback on along the way, so
+               there are no surprises at launch.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-body">
+            <span class="step-num">03</span>
+            <h3>Migrate</h3>
+            <p>We move your existing data, verify it against the source, and make sure
+               everything is accounted for before anything is switched off.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-body">
+            <span class="step-num">04</span>
+            <h3>Support</h3>
+            <p>Software you depend on needs someone to call. We stay on for maintenance,
+               changes, and the next thing you need.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ── About ────────────────────────────────────────────── -->
+  <section class="band about" id="about">
+    <div class="wrap about-grid reveal">
+      <div>
+        <p class="label">About Us</p>
+        <h2>A small shop, on purpose.</h2>
+        <p class="place">Lafayette, Louisiana</p>
+      </div>
+      <div class="about-body">
+        <p>
+          Adaptive Software builds custom software for small and mid-sized organizations
+          that have outgrown the tools they started with.
+        </p>
+        <p>
+          Staying small is deliberate. You work directly with the people building your
+          software, decisions are made together, and we only take on projects we can deliver
+          well. Our experience is in the work most firms avoid: messy data, legacy systems,
+          and workflows that grew over time instead of being designed.
+        </p>
+
+        <div class="founder">
+          <!-- Placeholder until the headshot arrives: swap the initials for
+               <img src="assets/brandon.jpg" alt="Brandon Do" width="96" height="96">. -->
+          <div class="founder-photo" aria-hidden="true">BD</div>
+          <div>
+            <h3>Meet Brandon Do</h3>
+            <p class="founder-role">Owner</p>
+            <p>
+              Brandon founded Adaptive Software and works directly with every client, from
+              the first conversation through launch and ongoing support.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact ──────────────────────────────────────────── -->
+  <section class="cta" id="contact">
+    <div class="wrap reveal">
+      <h2>Tell us what isn't working.</h2>
+      <p>
+        Describe your setup in a few sentences and we'll tell you honestly whether it's worth
+        building something, including when the answer is no.
+      </p>
+
+      <!-- Posts to Web3Forms, which emails the submission to
+           info@adaptivesoftwarellc.com and then sends the visitor to
+           /thank-you/. That page is the Google Ads conversion URL, so
+           keep the redirect pointing at it. The access key is meant to
+           be public; it can only deliver mail to our own inbox. -->
+      <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="da1f33d7-8828-468d-bb56-89a7e0d6918f">
+        <input type="hidden" name="subject" value="[DEV] Project inquiry from adaptivesoftwarellc.com">
+        <input type="hidden" name="from_name" value="Adaptive Software website">
+        <input type="hidden" name="redirect" value="https://dev.adaptivesoftwarellc.com/thank-you/">
+        <!-- Honeypot. Hidden from people; bots fill it and get dropped. -->
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <div class="field-row">
+          <label class="field">
+            <span>Name</span>
+            <input type="text" name="name" autocomplete="name" required>
+          </label>
+          <label class="field">
+            <span>Email</span>
+            <input type="email" name="email" autocomplete="email" required>
+          </label>
+        </div>
+        <label class="field">
+          <span>Company <em>(optional)</em></span>
+          <input type="text" name="company" autocomplete="organization">
+        </label>
+        <label class="field">
+          <span>What isn't working?</span>
+          <textarea name="message" rows="5" required></textarea>
+        </label>
+        <p class="form-note">Please don't include patient or other confidential information here.</p>
+
+        <button class="btn btn-light" type="submit">Send</button>
+      </form>
+
+      <p class="cta-alt">
+        Rather email?
+        <a href="mailto:info@adaptivesoftwarellc.com?subject=Project%20inquiry">info@adaptivesoftwarellc.com</a>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <span>&copy; <span id="year">2026</span> Adaptive Software LLC · Lafayette, Louisiana</span>
+    <span class="footer-meta">Custom software · Data management · Workflow consolidation</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
