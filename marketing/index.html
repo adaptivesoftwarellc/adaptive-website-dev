@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Websites, Ads &amp; SEO · Adaptive Software</title>
+<meta name="description" content="Adaptive Software builds fast, mobile-friendly websites and manages Google ads and local SEO for businesses in Lafayette and beyond.">
+<link rel="canonical" href="https://adaptivesoftwarellc.com/marketing/">
+
+<meta property="og:title" content="Websites, Ads &amp; SEO · Adaptive Software">
+<meta property="og:description" content="Adaptive Software builds fast, mobile-friendly websites and manages Google ads and local SEO for businesses in Lafayette and beyond.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://adaptivesoftwarellc.com/marketing/">
+<meta property="og:site_name" content="Adaptive Software">
+<meta property="og:image" content="https://adaptivesoftwarellc.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Adaptive Software — one system instead of six.">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Websites, Ads &amp; SEO · Adaptive Software">
+<meta name="twitter:description" content="Adaptive Software builds fast, mobile-friendly websites and manages Google ads and local SEO for businesses in Lafayette and beyond.">
+<meta name="twitter:image" content="https://adaptivesoftwarellc.com/assets/og-image.png">
+
+<meta name="theme-color" content="#063954">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="icon" href="/assets/mark.svg">
+<link rel="stylesheet" href="/styles.css">
+
+
+<!-- The whole reveal lives here, inline, on purpose.
+
+     It must be in the head because the start state is opacity 0 and
+     has to be armed before first paint — arming it from script.js at
+     the end of <body> would paint the sections, hide them, then fade
+     them back in.
+
+     It must be in the SAME FILE as the arming because index.html,
+     styles.css and script.js are cached independently for 10 minutes
+     each. When the hiding lived here and the revealing lived in
+     script.js, a visitor holding a stale script.js alongside fresh
+     HTML and CSS got sections armed at opacity 0 that nothing ever
+     turned back on — a blank page that looks like broken JS. Hiding
+     and revealing now ship together or not at all.
+
+     Belt and braces on top of that: any failure — an exception, a
+     browser without IntersectionObserver, an observer that somehow
+     never fires — ends with everything visible. Content is never
+     left depending on script that might not run. -->
+<script>
+(function () {
+  var DOC = document.documentElement;
+
+  function revealAll() {
+    DOC.classList.remove('js-reveal');
+    var els = document.querySelectorAll('.reveal');
+    for (var i = 0; i < els.length; i++) els[i].classList.add('is-in');
+  }
+
+  if (!('classList' in DOC) || !window.requestAnimationFrame) return;
+
+  DOC.classList.add('js-reveal');
+
+  // If anything below throws, this puts the page back to plain
+  // visible rather than leaving it blank.
+  var failsafe = setTimeout(revealAll, 3000);
+
+  function start() {
+    try {
+      var els = [].slice.call(document.querySelectorAll('.reveal'));
+      if (!els.length) { clearTimeout(failsafe); return; }
+
+      // A position sweep, not an IntersectionObserver. The observer
+      // only reports a CHANGE in intersection across a rendered
+      // frame, so jumping the page — a nav anchor, a restored scroll
+      // position, a flick to the bottom — skips sections without ever
+      // producing a callback, and they stay invisible for the whole
+      // visit. Reading position directly cannot miss: anything at or
+      // above the trigger line is revealed, whether we scrolled
+      // through it or teleported past it.
+      //
+      // The 0.88 is the old rootMargin: a section starts once it is
+      // properly into the viewport, not the instant it clears the
+      // edge. Revealed elements are dropped from the list, so the
+      // work shrinks to nothing as the page is read.
+      function sweep() {
+        var h = window.innerHeight || DOC.clientHeight;
+        for (var i = els.length - 1; i >= 0; i--) {
+          if (els[i].getBoundingClientRect().top < h * 0.88) {
+            els[i].classList.add('is-in');
+            els.splice(i, 1);
+          }
+        }
+        if (!els.length) {
+          window.removeEventListener('scroll', onScroll);
+          window.removeEventListener('resize', onScroll);
+        }
+      }
+
+      var ticking = false;
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(function () { ticking = false; sweep(); });
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      window.addEventListener('load', sweep);
+      sweep();
+
+      clearTimeout(failsafe);
+    } catch (e) {
+      clearTimeout(failsafe);
+      revealAll();
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
+  }
+
+  // ── Motion kill switch ────────────────────────────────────────
+  // Three questions, cheapest first.
+  //
+  // Two can be answered up front: has the visitor asked for reduced
+  // motion, and have they asked the browser to save data. The third —
+  // will this animation actually be smooth here — has no API. Nothing
+  // reports "this device will drop frames." So we measure instead:
+  // sample real frames for a short window and, if the device is not
+  // keeping up, cut motion for the rest of the visit.
+  //
+  // ORDER MATTERS. killMotion() calls revealAll() FIRST, so content is
+  // visible before transitions are disabled. Disabling transitions on
+  // an element still sitting at opacity 0 would freeze it there
+  // permanently — the blank-page bug again, arriving by a new route.
+  function killMotion() {
+    revealAll();
+    DOC.classList.add('no-motion');
+  }
+
+  try {
+    var nav = navigator;
+    var asked = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var saving = nav.connection && nav.connection.saveData;
+
+    if (asked || saving) {
+      killMotion();
+      return;
+    }
+
+    // Frame-rate probe. Watches ~20 frames, then compares how many
+    // arrived against how many should have in that wall-clock time.
+    // Below 45% of the expected rate the page is visibly stuttering,
+    // so motion stops being decoration and starts being a cost.
+    // Deliberately generous: this should catch a genuinely struggling
+    // device, not a browser that hitched once while fonts landed.
+    var frames = 0, first = 0, last = 0;
+    function tick(now) {
+      if (!first) first = now;
+      last = now;
+      frames++;
+      if (frames < 20) {
+        window.requestAnimationFrame(tick);
+        return;
+      }
+      var elapsed = last - first;
+      if (elapsed > 0) {
+        var fps = (frames - 1) / (elapsed / 1000);
+        if (fps < 27) killMotion();   // 45% of a 60Hz budget
+      }
+    }
+    window.requestAnimationFrame(tick);
+  } catch (e) {
+    // A broken probe must never cost anyone the page.
+  }
+})();
+</script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- The ruled sheet the whole page is set on. Decorative; sections
+     that need to break the grid simply paint over it. -->
+<div class="sheet" aria-hidden="true"><i></i></div>
+
+<header class="nav" id="top">
+  <div class="wrap nav-inner">
+    <!-- Mark is real brand artwork. The wordmark is HTML type, not the logo's own
+         text, because that text is live Pepi and won't render on visitors' machines. -->
+    <a class="wordmark" href="/" aria-label="Adaptive Software, home">
+      <img class="wordmark-mark" src="/assets/mark.svg" alt="" width="20" height="34">
+      <span>Adaptive<span class="wordmark-light">Software</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/software/">Software</a>
+      <a href="/marketing/">Marketing</a>
+      <a href="/#about">About Us</a>
+      <a class="btn btn-sm" href="/#contact">Contact</a>
+    </nav>
+
+    <button class="nav-toggle" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
+      <span></span><span></span>
+    </button>
+  </div>
+
+  <div class="menu" id="menu" hidden>
+    <a href="/software/">Software</a>
+    <a href="/marketing/">Marketing</a>
+    <a href="/#about">About Us</a>
+    <a href="/#contact">Contact</a>
+    <a href="tel:+15048103955">Call (504) 810-3955</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="wrap hero-inner solo">
+      <div class="hero-copy">
+        <p class="label">Websites · Ads · SEO</p>
+        <h1>Get found. Get customers.</h1>
+        <p class="lede">
+          A good business still needs people to find it. We build your website, run your ads,
+          and keep you showing up in search, all handled in one place by people you can call.
+        </p>
+        <div class="hero-actions">
+          <a class="btn" href="/?interest=Website#contact">Get in touch</a>
+          <a class="btn btn-ghost" href="#services">See what we do</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Services ─────────────────────────────────────────── -->
+  <section class="band" id="services">
+    <div class="wrap reveal">
+      <p class="label">What we do</p>
+      <h2 class="section-head">Three ways we help you grow.</h2>
+
+      <ul class="work">
+        <li class="work-item">
+          <p class="work-kind">Websites</p>
+          <div>
+            <h3>A site that works as hard as you do</h3>
+            <p>
+              Fast, mobile-friendly websites built for your business, with a clear way for
+              visitors to call, book, or get in touch, and easy for you to keep up to date.
+            </p>
+          </div>
+        </li>
+
+        <li class="work-item">
+          <p class="work-kind">Ads Management</p>
+          <div>
+            <h3>Ad spend that turns into leads</h3>
+            <p>
+              We set up and manage your Google and social ads, track which ones bring in
+              customers, and adjust them every month so your budget goes where it works.
+            </p>
+          </div>
+        </li>
+
+        <li class="work-item">
+          <p class="work-kind">SEO</p>
+          <div>
+            <h3>Show up when people search for you</h3>
+            <p>
+              Your Google Business Profile, on-page fixes, and steady local search work, with a
+              plain monthly report on what changed and what it brought in.
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── How it works (a real sequence, hence numbered) ────── -->
+  <section class="band process" id="process">
+    <div class="wrap reveal">
+      <p class="label">How it works</p>
+      <h2 class="section-head">Four steps, and you approve each one.</h2>
+
+      <ol class="steps">
+        <li>
+          <div class="step-body">
+            <span class="step-num">01</span>
+            <h3>Review</h3>
+            <p>We look at your current site, your Google listing, and any ads you're running,
+               and tell you plainly what's worth fixing first.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-body">
+            <span class="step-num">02</span>
+            <h3>Build</h3>
+            <p>We build or rebuild your site and set up your Google Business Profile, tracking,
+               and ads so every call and form is counted.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-body">
+            <span class="step-num">03</span>
+            <h3>Launch</h3>
+            <p>Your site goes live and your ads start running. Nothing goes out without your
+               sign-off.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-body">
+            <span class="step-num">04</span>
+            <h3>Grow</h3>
+            <p>Each month we adjust your ads, keep up the search work, and send a short report
+               on what came in and what it cost.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ── Contact handoff: one form lives on the homepage ── -->
+  <section class="cta" id="contact">
+    <div class="wrap reveal">
+      <h2>Tell us about your business.</h2>
+      <p>A few sentences about what you do and who you want to reach is plenty. We&#39;ll tell you honestly what&#39;s worth doing first.</p>
+      <a class="btn btn-light" href="/?interest=Website#contact">Get in touch</a>
+      <p class="cta-alt">
+        Rather call or email?
+        <a href="tel:+15048103955">(504) 810-3955</a> ·
+        <a href="mailto:info@adaptivesoftwarellc.com?subject=Project%20inquiry">info@adaptivesoftwarellc.com</a>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <span>&copy; <span id="year">2026</span> Adaptive Software LLC · Lafayette, Louisiana</span>
+    <span class="footer-meta"><a href="tel:+15048103955">(504) 810-3955</a> · Custom software · Websites · Ads &amp; SEO</span>
+  </div>
+</footer>
+
+<script src="/script.js"></script>
+</body>
+</html>

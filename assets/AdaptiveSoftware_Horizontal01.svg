@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 846.36 96.69">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        letter-spacing: 0em;
+      }
+
+      .cls-3 {
+        fill: #1f92a5;
+        font-family: PepiTRIAL-Regular, 'Pepi TRIAL';
+        font-size: 84.39px;
+      }
+
+      .cls-4 {
+        fill: url(#linear-gradient-4);
+      }
+
+      .cls-5 {
+        fill: url(#linear-gradient-3);
+      }
+
+      .cls-6 {
+        fill: url(#linear-gradient-2);
+      }
+
+      .cls-7 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-8 {
+        clip-path: url(#clippath-1);
+      }
+
+      .cls-9 {
+        letter-spacing: 0em;
+      }
+
+      .cls-10 {
+        letter-spacing: 0em;
+      }
+
+      .cls-11 {
+        fill: #173b4c;
+        font-family: PepiTRIAL-SemiBold, 'Pepi TRIAL';
+        font-size: 87.82px;
+        font-weight: 600;
+      }
+
+      .cls-12 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-13 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-14 {
+        letter-spacing: -.01em;
+      }
+
+      .cls-15 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-16 {
+        letter-spacing: -.01em;
+      }
+
+      .cls-17 {
+        letter-spacing: -.05em;
+      }
+
+      .cls-18 {
+        letter-spacing: -.03em;
+      }
+
+      .cls-19 {
+        letter-spacing: 0em;
+      }
+
+      .cls-20 {
+        clip-path: url(#clippath);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="19.29" y1="7.92" x2="38.83" y2="16.17" gradientUnits="userSpaceOnUse">
+      <stop offset=".23" stop-color="#158098"/>
+      <stop offset="1" stop-color="#3bb7c9"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="0" y1="41.57" x2="24.63" y2="41.57" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#063954"/>
+      <stop offset="1" stop-color="#209bd1"/>
+    </linearGradient>
+    <clipPath id="clippath">
+      <path class="cls-1" d="M48.13,42.57h-15.6l-7.8,13.51,7.8,13.51h.03l-.02.02v-.02h-15.61l-7.8,13.51,7.8,13.51h15.6l7.8-13.51-.02-.03,7.78-13.48h.04l7.8-13.51-7.8-13.51ZM39.35,69.67l-.11-.08h.15l-.04.08Z"/>
+    </clipPath>
+    <linearGradient id="linear-gradient-3" x1="-3748.74" y1="-1553.14" x2="-3702.36" y2="-1553.14" gradientTransform="translate(3753.69 1622.81)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3a9678"/>
+      <stop offset=".52" stop-color="#45b38e"/>
+      <stop offset=".97" stop-color="#00b884"/>
+    </linearGradient>
+    <clipPath id="clippath-1">
+      <path class="cls-1" d="M48.13,42.65h-15.6l-7.8,13.51,7.8,13.51h.03l-.02.02v-.02h-15.61l-7.8,13.51,7.8,13.51h15.6l7.8-13.51-.02-.03,7.78-13.48h.04l7.8-13.51-7.8-13.51ZM39.35,69.75l-.11-.08h.15l-.04.08Z"/>
+    </clipPath>
+    <linearGradient id="linear-gradient-4" x1="-3761.81" y1="-1557.55" x2="-3683.02" y2="-1557.55" gradientTransform="translate(3748.25 1636.28)" gradientUnits="userSpaceOnUse">
+      <stop offset=".07" stop-color="#41a887"/>
+      <stop offset=".52" stop-color="#45b36b"/>
+      <stop offset="1" stop-color="#59c400"/>
+    </linearGradient>
+  </defs>
+  <g>
+    <text class="cls-11" transform="translate(72.85 76.45)"><tspan class="cls-15" x="0" y="0">A</tspan><tspan x="62.7" y="0">da</tspan><tspan class="cls-13" x="169.14" y="0">p</tspan><tspan x="224.11" y="0">ti</tspan><tspan class="cls-12" x="285.5" y="0">v</tspan><tspan class="cls-9" x="334.23" y="0">e</tspan></text>
+    <text class="cls-3" transform="translate(473.8 75.06)"><tspan x="0" y="0">S</tspan><tspan class="cls-14" x="55.19" y="0">o</tspan><tspan class="cls-19" x="106.92" y="0">f</tspan><tspan class="cls-18" x="141.51" y="0">t</tspan><tspan class="cls-16" x="176.2" y="0">w</tspan><tspan class="cls-2" x="246.07" y="0">a</tspan><tspan class="cls-17" x="292.73" y="0">r</tspan><tspan class="cls-10" x="319.56" y="0">e</tspan></text>
+  </g>
+  <g>
+    <g>
+      <polygon class="cls-7" points="40.33 0 48.13 13.51 40.33 27.02 24.73 27.02 16.93 13.51 24.73 0 40.33 0"/>
+      <polygon class="cls-6" points="24.63 27.02 8.4 27.02 0 41.57 8.4 56.13 24.63 56.13 16.23 41.57 24.63 27.02"/>
+      <g class="cls-20">
+        <rect class="cls-5" x="-14.55" y="36.5" width="88.09" height="66.34" transform="translate(102.9 51.37) rotate(98.95)"/>
+      </g>
+    </g>
+    <g class="cls-8">
+      <rect class="cls-4" x="-11.52" y="45.56" width="88.09" height="66.34" transform="translate(115.36 58.84) rotate(98.95)"/>
+    </g>
+  </g>
+</svg>
